@@ -1,7 +1,24 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import svelteLogo from "./assets/svelte.svg";
+  import viteLogo from "/vite.svg";
+  import Counter from "./lib/Counter.svelte";
+  let newItem = "";
+
+  let todoList = [
+    { text: "Write my first post", status: true },
+    { text: "Upload the post to the blog", status: false },
+    { text: "Publish the post at Facebook", status: false },
+  ];
+
+  function addToList() {
+    todoList = [...todoList, { text: newItem, status: false }];
+    newItem = "";
+  }
+
+  function removeFromList(index) {
+    todoList.splice(index, 1);
+    todoList = todoList;
+  }
 </script>
 
 <main>
@@ -15,17 +32,16 @@
   </div>
   <h1>Vite + Svelte</h1>
 
-  <div class="card">
-    <Counter />
-  </div>
+  <input bind:value={newItem} type="text" placeholder="new todo item.." />
+  <button on:click={addToList}>Add</button>
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  <br />
+  {#each todoList as item, index}
+    <input bind:checked={item.status} type="checkbox" />
+    <span class:checked={item.status}>{item.text}</span>
+    <span on:click={() => removeFromList(index)}>❌</span>
+    <br />
+  {/each}
 </main>
 
 <style>
@@ -43,5 +59,9 @@
   }
   .read-the-docs {
     color: #888;
+  }
+  /* CUSTOM CSS */
+  .checked {
+    text-decoration: line-through;
   }
 </style>
